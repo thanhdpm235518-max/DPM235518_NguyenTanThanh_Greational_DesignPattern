@@ -1,0 +1,406 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <title>Hướng dẫn Push Code lên GitHub</title>
+  <style>
+    body {
+      font-family: 'Times New Roman', Times, serif;
+      font-size: 13pt;
+      margin: 2.5cm 3cm;
+      color: #000;
+      line-height: 1.6;
+    }
+    h1 {
+      font-size: 16pt;
+      font-weight: bold;
+      text-align: center;
+      text-transform: uppercase;
+      margin-bottom: 6pt;
+    }
+    h2 {
+      font-size: 14pt;
+      font-weight: bold;
+      margin-top: 18pt;
+      margin-bottom: 6pt;
+      border-bottom: 1px solid #000;
+      padding-bottom: 2pt;
+    }
+    h3 {
+      font-size: 13pt;
+      font-weight: bold;
+      margin-top: 12pt;
+      margin-bottom: 4pt;
+    }
+    p { margin: 4pt 0; }
+    .subtitle {
+      text-align: center;
+      font-size: 12pt;
+      margin-bottom: 24pt;
+    }
+    .info-box {
+      border: 1px solid #000;
+      padding: 8pt 12pt;
+      margin: 10pt 0;
+      background-color: #f5f5f5;
+    }
+    .warning-box {
+      border: 1px solid #000;
+      border-left: 4px solid #c00;
+      padding: 8pt 12pt;
+      margin: 10pt 0;
+    }
+    .note-box {
+      border: 1px solid #000;
+      border-left: 4px solid #006c9c;
+      padding: 8pt 12pt;
+      margin: 10pt 0;
+    }
+    code, pre {
+      font-family: 'Courier New', Courier, monospace;
+      font-size: 11pt;
+      background-color: #f0f0f0;
+      padding: 2pt 4pt;
+    }
+    pre {
+      display: block;
+      border: 1px solid #ccc;
+      padding: 8pt 12pt;
+      margin: 8pt 0;
+      white-space: pre-wrap;
+    }
+    ol, ul { margin: 4pt 0 4pt 20pt; }
+    li { margin-bottom: 4pt; }
+    table {
+      border-collapse: collapse;
+      width: 100%;
+      margin: 10pt 0;
+    }
+    th {
+      background-color: #d0d0d0;
+      border: 1px solid #000;
+      padding: 5pt 8pt;
+      text-align: left;
+      font-weight: bold;
+    }
+    td {
+      border: 1px solid #000;
+      padding: 5pt 8pt;
+    }
+    .step-number {
+      font-size: 14pt;
+      font-weight: bold;
+      color: #000;
+    }
+    .divider {
+      border: none;
+      border-top: 1px solid #aaa;
+      margin: 16pt 0;
+    }
+    .center { text-align: center; }
+    .bold { font-weight: bold; }
+  </style>
+</head>
+<body>
+
+  <h1>Hướng dẫn Push Code C# lên GitHub</h1>
+  <p class="subtitle">
+    Dự án: <strong>DPM235518_NguyenTanThanh_Tuan01_Creational_Design_Pattern</strong><br>
+    Sinh viên: Nguyễn Văn Thắng &nbsp;|&nbsp; MSSV: DPM235479<br>
+    Ngày: 03/09/2026
+  </p>
+
+  <hr class="divider">
+
+  <!-- ===== PHẦN 1 ===== -->
+  <h2>I. Điều Kiện Tiên Quyết</h2>
+  <p>Trước khi thực hiện, cần đảm bảo máy tính đã cài đặt đầy đủ các công cụ sau:</p>
+  <table>
+    <tr>
+      <th>Công cụ</th>
+      <th>Phiên bản yêu cầu</th>
+      <th>Link tải</th>
+    </tr>
+    <tr>
+      <td>Git</td>
+      <td>2.x trở lên</td>
+      <td>https://git-scm.com/downloads</td>
+    </tr>
+    <tr>
+      <td>Visual Studio / VS Code</td>
+      <td>2022 hoặc mới hơn</td>
+      <td>https://visualstudio.microsoft.com</td>
+    </tr>
+    <tr>
+      <td>.NET SDK</td>
+      <td>.NET 9.0</td>
+      <td>https://dotnet.microsoft.com/download</td>
+    </tr>
+    <tr>
+      <td>Tài khoản GitHub</td>
+      <td>—</td>
+      <td>https://github.com</td>
+    </tr>
+  </table>
+
+  <h3>Kiểm tra Git đã cài chưa</h3>
+  <p>Mở <strong>PowerShell</strong> hoặc <strong>Command Prompt</strong> và gõ lệnh:</p>
+  <pre>git --version</pre>
+  <p>Nếu hiện <code>git version 2.x.x</code> là đã cài thành công.</p>
+
+  <hr class="divider">
+
+  <!-- ===== PHẦN 2 ===== -->
+  <h2>II. Tạo Personal Access Token (PAT) trên GitHub</h2>
+  <p>
+    GitHub không cho phép dùng mật khẩu thông thường để push code.
+    Bạn cần tạo <strong>Personal Access Token</strong> thay thế.
+  </p>
+
+  <ol>
+    <li>Đăng nhập vào <strong>https://github.com</strong></li>
+    <li>Nhấn vào <strong>ảnh đại diện</strong> góc trên phải → chọn <strong>Settings</strong></li>
+    <li>Kéo xuống cuối menu bên trái → chọn <strong>Developer settings</strong></li>
+    <li>Chọn <strong>Personal access tokens</strong> → <strong>Tokens (classic)</strong></li>
+    <li>Nhấn <strong>Generate new token</strong> → <strong>Generate new token (classic)</strong></li>
+    <li>Điền thông tin:
+      <ul>
+        <li><strong>Note:</strong> <code>push-code</code> (đặt tên bất kỳ)</li>
+        <li><strong>Expiration:</strong> Chọn thời hạn (ví dụ: 90 days)</li>
+        <li><strong>Select scopes:</strong> Tick vào ô <strong>repo</strong> (toàn bộ)</li>
+      </ul>
+    </li>
+    <li>Nhấn <strong>Generate token</strong></li>
+    <li><strong class="bold">SAO CHÉP TOKEN NGAY</strong> — Token chỉ hiện 1 lần duy nhất!</li>
+  </ol>
+
+  <div class="warning-box">
+    <strong>⚠ Lưu ý quan trọng:</strong><br>
+    Token chỉ hiển thị một lần sau khi tạo. Hãy sao chép và lưu lại ngay vào
+    Notepad hoặc nơi an toàn trước khi đóng trang.
+  </div>
+
+  <hr class="divider">
+
+  <!-- ===== PHẦN 3 ===== -->
+  <h2>III. Tạo Repository trên GitHub</h2>
+
+  <ol>
+    <li>Đăng nhập vào <strong>https://github.com</strong></li>
+    <li>Nhấn nút <strong>"+"</strong> góc trên phải → chọn <strong>"New repository"</strong></li>
+    <li>Điền thông tin repository:
+      <ul>
+        <li><strong>Repository name:</strong> <code>DPM235518_NguyenTanThanh_Tuan01_Creational_Design_Pattern</code></li>
+        <li><strong>Description:</strong> Creational Design Patterns - C# (tùy chọn)</li>
+        <li><strong>Visibility:</strong> Chọn <strong>Public</strong> hoặc <strong>Private</strong></li>
+        <li><strong>KHÔNG tick</strong> "Add a README file", "Add .gitignore", "Choose a license"</li>
+      </ul>
+    </li>
+    <li>Nhấn <strong>"Create repository"</strong></li>
+  </ol>
+
+  <div class="note-box">
+    <strong>ℹ Lý do không tick README:</strong> Vì code đã có sẵn trên máy tính,
+    nếu tạo README trên GitHub sẽ gây xung đột lịch sử commit khi push lên.
+  </div>
+
+  <hr class="divider">
+
+  <!-- ===== PHẦN 4 ===== -->
+  <h2>IV. Các Bước Push Code Lên GitHub</h2>
+  <p>
+    Mở <strong>PowerShell</strong> (hoặc Terminal trong Visual Studio Code),
+    <code>cd</code> đến thư mục dự án rồi thực hiện lần lượt các bước sau:
+  </p>
+
+  <h3><span class="step-number">Bước 1:</span> Khởi tạo Git Repository</h3>
+  <p>Lệnh này tạo thư mục <code>.git</code> — bộ nhớ lịch sử của Git trong dự án.</p>
+  <pre>git init</pre>
+  <p>Kết quả mong đợi: <code>Initialized empty Git repository in ...</code></p>
+
+  <h3><span class="step-number">Bước 2:</span> Tạo file .gitignore</h3>
+  <p>
+    File <code>.gitignore</code> giúp Git bỏ qua các thư mục <code>bin/</code>, <code>obj/</code>, <code>.vs/</code>
+    (file biên dịch, không cần thiết phải đẩy lên GitHub).
+  </p>
+  <p>Tạo file <code>.gitignore</code> tại thư mục gốc với nội dung:</p>
+  <pre>bin/
+obj/
+.vs/
+*.user
+*.suo
+packages/
+.DS_Store
+Thumbs.db</pre>
+
+  <h3><span class="step-number">Bước 3:</span> Thêm toàn bộ file vào Staging Area</h3>
+  <p>Lệnh này đánh dấu tất cả file để chuẩn bị commit.</p>
+  <pre>git add .</pre>
+
+  <h3><span class="step-number">Bước 4:</span> Tạo Commit đầu tiên</h3>
+  <p>Commit là một "ảnh chụp" trạng thái code tại thời điểm này, kèm theo thông điệp mô tả.</p>
+  <pre>git commit -m "Initial commit: Creational Design Patterns - Factory, Builder, Abstract, Prototype, Singleton"</pre>
+  <p>Kết quả mong đợi: danh sách các file được tạo (create mode 100644 ...).</p>
+
+  <h3><span class="step-number">Bước 5:</span> Đổi tên nhánh thành main</h3>
+  <p>GitHub mặc định dùng nhánh <code>main</code> (thay vì <code>master</code> cũ).</p>
+  <pre>git branch -M main</pre>
+
+  <h3><span class="step-number">Bước 6:</span> Kết nối với Repository GitHub</h3>
+  <p>
+    Lệnh này liên kết repo trên máy tính với repo trên GitHub.<br>
+    Thay <code>YOUR_USERNAME</code> bằng tên tài khoản GitHub của bạn.
+  </p>
+  <pre>git remote add origin https://github.com/YOUR_USERNAME/DPM235518_NguyenTanThanh_Tuan01_Creational_Design_Pattern.git</pre>
+  <p><strong>Ví dụ cụ thể:</strong></p>
+  <pre>git remote add origin https://github.com/NGUYENVANTHANG-DPM235479/DPM235518_NguyenTanThanh_Tuan01_Creational_Design_Pattern.git</pre>
+
+  <h3><span class="step-number">Bước 7:</span> Push Code lên GitHub</h3>
+  <p>Lệnh này đẩy toàn bộ code lên GitHub lần đầu tiên.</p>
+  <pre>git push -u origin main</pre>
+  <p>Hệ thống sẽ hỏi:</p>
+  <ul>
+    <li><strong>Username:</strong> Nhập tên tài khoản GitHub (ví dụ: <code>NGUYENVANTHANG-DPM235479</code>)</li>
+    <li><strong>Password:</strong> Dán <strong>Personal Access Token</strong> đã tạo ở Phần II (không nhập mật khẩu thường)</li>
+  </ul>
+  <p>Kết quả mong đợi:</p>
+  <pre>* [new branch]      main -> main
+branch 'main' set up to track 'origin/main'.</pre>
+
+  <hr class="divider">
+
+  <!-- ===== PHẦN 5 ===== -->
+  <h2>V. Kiểm Tra Kết Quả</h2>
+  <p>Sau khi push thành công, vào trình duyệt và truy cập:</p>
+  <pre>https://github.com/NGUYENVANTHANG-DPM235479/DPM235518_NguyenTanThanh_Tuan01_Creational_Design_Pattern</pre>
+  <p>Bạn sẽ thấy toàn bộ 10 project đã được upload lên.</p>
+
+  <hr class="divider">
+
+  <!-- ===== PHẦN 6 ===== -->
+  <h2>VI. Cách Push Lần Sau (Khi Có Thay Đổi)</h2>
+  <p>Mỗi khi chỉnh sửa code và muốn cập nhật lên GitHub, chỉ cần 3 lệnh:</p>
+  <pre># 1. Thêm các file thay đổi vào staging
+git add .
+
+# 2. Tạo commit với mô tả thay đổi
+git commit -m "Mô tả nội dung thay đổi"
+
+# 3. Push lên GitHub
+git push</pre>
+
+  <div class="note-box">
+    <strong>ℹ Mẹo đặt tên commit:</strong><br>
+    Nên đặt tên commit rõ ràng, ví dụ:<br>
+    <code>"Add Singleton pattern"</code><br>
+    <code>"Fix bug in AbstractFactory"</code><br>
+    <code>"Update README"</code>
+  </div>
+
+  <hr class="divider">
+
+  <!-- ===== PHẦN 7 ===== -->
+  <h2>VII. Xử Lý Lỗi Thường Gặp</h2>
+  <table>
+    <tr>
+      <th>Lỗi</th>
+      <th>Nguyên nhân</th>
+      <th>Cách xử lý</th>
+    </tr>
+    <tr>
+      <td><code>Authentication failed</code></td>
+      <td>Sai username hoặc token</td>
+      <td>Kiểm tra lại username và dùng Personal Access Token thay mật khẩu</td>
+    </tr>
+    <tr>
+      <td><code>remote origin already exists</code></td>
+      <td>Đã thêm remote trước đó</td>
+      <td>Chạy: <code>git remote set-url origin [URL mới]</code></td>
+    </tr>
+    <tr>
+      <td><code>rejected - non-fast-forward</code></td>
+      <td>GitHub có commit mà máy chưa có</td>
+      <td>Chạy: <code>git pull origin main --rebase</code> rồi push lại</td>
+    </tr>
+    <tr>
+      <td><code>not a git repository</code></td>
+      <td>Chưa chạy <code>git init</code></td>
+      <td>Chạy lại Bước 1: <code>git init</code></td>
+    </tr>
+    <tr>
+      <td>Push thành công nhưng không thấy file</td>
+      <td>File bị <code>.gitignore</code> loại trừ</td>
+      <td>Kiểm tra file <code>.gitignore</code>, dùng <code>git status</code> để xem</td>
+    </tr>
+  </table>
+
+  <hr class="divider">
+
+  <!-- ===== PHẦN 8 ===== -->
+  <h2>VIII. Danh Sách 10 Project Trong Repository</h2>
+  <table>
+    <tr>
+      <th>STT</th>
+      <th>Tên Project</th>
+      <th>Design Pattern</th>
+    </tr>
+    <tr>
+      <td class="center">1</td>
+      <td>DPM235518_NguyenTanThanh_Tuan01_Factory_DP</td>
+      <td>Factory Method (Conceptual)</td>
+    </tr>
+    <tr>
+      <td class="center">2</td>
+      <td>DPM235518_NguyenTanThanh_Tuan01_Factory_Read_NhanVien_DP</td>
+      <td>Factory Method (Thực tế - Nhân viên)</td>
+    </tr>
+    <tr>
+      <td class="center">3</td>
+      <td>DPM235518_NguyenTanThanh_Tuan01_Builder_DP</td>
+      <td>Builder (Conceptual)</td>
+    </tr>
+    <tr>
+      <td class="center">4</td>
+      <td>DPM235518_NguyenTanThanh_Tuan01_Builder_Read_NhanVien_DP</td>
+      <td>Builder (Thực tế - Nhân viên)</td>
+    </tr>
+    <tr>
+      <td class="center">5</td>
+      <td>DPM235518_NguyenTanThanh_Tuan01_Abstract_DP</td>
+      <td>Abstract Factory (Conceptual)</td>
+    </tr>
+    <tr>
+      <td class="center">6</td>
+      <td>DPM235518_NguyenTanThanh_Tuan01_Abstract_Real_NhanVien_DP</td>
+      <td>Abstract Factory (Thực tế - Nhân viên)</td>
+    </tr>
+    <tr>
+      <td class="center">7</td>
+      <td>DPM235518_NguyenTanThanh_Tuan01_Prototype_DP</td>
+      <td>Prototype (Conceptual)</td>
+    </tr>
+    <tr>
+      <td class="center">8</td>
+      <td>DPM235518_NguyenTanThanh_Tuan01_Prototype_Real_NhanVien_DP</td>
+      <td>Prototype (Thực tế - Nhân viên)</td>
+    </tr>
+    <tr>
+      <td class="center">9</td>
+      <td>DPM235518_NguyenTanThanh_Tuan01_Singleton_DP</td>
+      <td>Singleton (Conceptual)</td>
+    </tr>
+    <tr>
+      <td class="center">10</td>
+      <td>DPM235518_NguyenTanThanh_Tuan01_Singleton_Real_NhanVien_DP</td>
+      <td>Singleton (Thực tế - Nhân viên)</td>
+    </tr>
+  </table>
+
+  <hr class="divider">
+
+  <p class="center" style="margin-top: 24pt; font-style: italic;">
+    --- Hết tài liệu hướng dẫn ---
+  </p>
+
+</body>
+</html>
